@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<head>
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courgette&family=DM+Serif+Display&family=VT323&display=swap" rel="stylesheet">
+<style>
+	
+input {
+	font-size: 22px;
+}
+	
+body {
+  font-family: 'DM Serif Display', sans-serif;
+  margin: 0 auto;
+  max-width: 600px;
+  background: #ff0000;
+  font-size:30;
+}
+div {
+  height: 200px;
+  background-size: cover;
+  position: relative;
+  margin: 40px 0 0 0;
+  border-radius: 12px;
+  
+}
+h1 {
+font-family: 'Courgette', cursive; sans-serif;
+  text-align: center;
+  font-size: 150px;
+  color: #00119d;
+  margin: 70px 0 0 0;
+}
+h2 {
+  font-family: 'VT323', monospace; sans-serif;
+  text-align: center;
+  color: #0b7;
+  margin: 0px 0 70px 0;
+  
+}
+p {
+  color: rgba(0,134,255,1);
+  background: black;
+  background: linear-gradient(bottom, rgba(0,0,0,1), rgba(0,0,0,.4));
+  background: -webkit-linear-gradient(bottom, rgba(0,0,0,1), rgba(0,162,255,.4));
+  background: -moz-linear-gradient(bottom, rgba(0,0,0,1), rgba(0,0,0,.4));
+  padding: 10px;
+  line-height: 28px;
+  text-align: justify;
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+  height: 30px;
+  transition: height .5s;
+  -webkit-transition: height .5s;
+  -moz-transition: height .5s;
+  
+}
+
+small {
+  opacity: 0;
+}
+
+.show-description p {
+  height: 150px;
+}
+
+.show-description small {
+  opacity: 1;
+}
+
+.first{
+  background-image: url("https://i.imgur.com/mbbrOP9.jpeg");
+}
+.second{
+  background-image: url("https://i.imgur.com/DAxU3ux.jpeg");
+}
+.dessert{
+  background-image: url("https://i.imgur.com/vVCA80x.jpeg");
+}
+.price {
+  float: right;
+}
+@media (max-width: 500px) {
+  h1 {
+    font-size: 50px;
+    margin-top: 20px;
+    line-height: 40px;
+  }
+  h2 {
+    font-size: 50px;
+    margin: 20px 0 30px 0;
+  }
+  div {
+    margin: 20px 12px 0 12px;
+  }
+  p {
+    font-size: 20px;
+    line-height: 24px;
+  }
+  small {
+    font-size: 16px;
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+<h1>MARVEL</h1>
+<h2>Posters Shop</h2>
+<div class="first">
+<input type="number" class="quantities" min="0" style="width: 50px">
+  <p>MARVEL superhero poster<span class="price">$20</span><br />
+  <small> We are the enemies and superheroes the movies MARVEL. </small></p>
+</div>
+
+<div class="second">
+<input type="number" class="quantities" min="0" style="width: 50px">
+  <p> AVENGERS Poster  <span class="price">$25</span><br />
+  <small> Avengers They fight against their enemies in the diferents movies </small></p>
+</div>
+  
+<div class="dessert">
+<input type="number" class="quantities" min="0" style="width: 50px">
+  <p>IRON MAN Poster <span class="price">$15</span><br />
+  <small>The movie the IRON MAN 2. FIGHT WITH CAPTAIN AMERICA </small></p>
+</div>
+  <br><br>
+  <input id="Name" placeholder="Your name">
+  <input id="Email" placeholder="Your email">
+  <input type="submit" id="submit">
+  <br><br>
+
+<script>
+  $('div').on('click', function() {
+      $(this).toggleClass('show-description');
+  });<a href="Emyy3.html" id="" title="Emyy3">Emyy3</a>
+</script>
+  
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+	import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+	
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDbX2WphQzc3JaYtFhD-5M_F1rNuojzpOY",
+      authDomain: "marvel-emy.firebaseapp.com",
+      projectId: "marvel-emy",
+      storageBucket: "marvel-emy.appspot.com",
+      messagingSenderId: "324472440051",
+      appId: "1:324472440051:web:3a23248777190c466fe386"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+	const db = getDatabase(app);
+	
+	const Name = document.querySelector("#Name") 
+	const Email = document.querySelector("#Email")
+	document.querySelector('#submit').addEventListener('click', Submit)
+	const quantities = document.querySelectorAll(".quantities") 
+	const itemsList = ["Marvel", "AVENGERS", "Iron Man"]
+	const prices = document.querySelectorAll(".price") 
+	
+	function Submit() {
+	  const timestamp = buildTimestamp()
+	   let cart = { }
+	   let total = 0 
+
+      for  (let i=0; i<quantities.length; i=i+1) {
+  	 	 if (quantities[i].value != "0" && quantities[i].value != "") {	
+			  let price = prices[i].innerHTML.replace('$', '')
+			  total = total + quantities[i].value * price 
+	  		 cart[itemsList[i]] = parseInt(quantities[i].value) 
+		  	}
+	  	   quantities[i].value = ""
+	    }
+	  
+	  set(ref(db, timestamp), {
+		  Name: Name.value,
+	      email: Email.value,
+		  cart: cart,
+		  totalPrice: total,
+		  paid: "not yet",
+	  });
+
+	  Name.value = ""
+	  Email.value = ""
+	}
+	
+	function buildTimestamp() {
+	  const now = new Date();
+	  let timestamp = now.getFullYear().toString() + "/";
+	  //const month = now.toLocaleString('default', { month: 'long' });
+
+	  let month = now.getMonth()+1   //add 1 because Javascript uses 0 for January
+	  month = month.toString()
+	  month = addLeadingZero(month)
+	  timestamp += month + "/"; 
+
+	  let date = now.getDate().toString()
+	  date = addLeadingZero(date)
+	  timestamp += date + "/";
+
+	  let hours = now.getHours().toString()
+	  hours = addLeadingZero(hours)
+	  timestamp += hours + ":";
+
+	  let minutes = now.getMinutes().toString()
+	  minutes = addLeadingZero(minutes)
+	  timestamp += minutes + ":";
+
+	  let seconds = now.getSeconds().toString()
+	  seconds = addLeadingZero(seconds)
+	  timestamp += seconds;
+  
+	  return timestamp
+	}
+  	  
+	
+	
+	
+	function addLeadingZero(units) {
+		if (units.length < 2) {
+			units = "0" + units
+		}
+		return units
+	}
+  </script>
+
+</body>
